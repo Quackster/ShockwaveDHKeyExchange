@@ -4,6 +4,12 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class written by Quackster based on decompiled v28 HugeInt15.ls class from hh_entry_init from ProjectorRays.
+ * Copyright: 2023
+ *
+ * <3
+ */
 public class HugeInt15 {
     public List<Integer> pData_NxIhNARqldyJyY2PfT03dK8t9OLUR;
     private boolean pNegative;
