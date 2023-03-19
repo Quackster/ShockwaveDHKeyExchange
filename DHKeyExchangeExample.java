@@ -1,6 +1,12 @@
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
+/**
+ * Class written by Quackster
+ * Copyright: 2023
+ *
+ * <3
+ */
 public class DHKeyExchangeExample {
     // Static values for p and g
     private static final BigInteger p = new BigInteger("ffffffffffffffffc90fdaa22168c234c4c6628b80dc1cd129024" +
