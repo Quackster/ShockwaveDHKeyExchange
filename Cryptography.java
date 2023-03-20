@@ -1,4 +1,4 @@
-package net.h4bbo.phobos.server.habbohotel.encryption;
+package org.alexdev.havana.game.encryption;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -127,7 +127,7 @@ public class Cryptography {
         int a = 0;
         while (a < tdata.length()) {
             ArrayList<Integer> tDataIn = new ArrayList<Integer>();
-            int tNum1 =pTableList.get((int)tdata.charAt(a));
+            int tNum1 = pTableList.get((int)tdata.charAt(a));
             int tNum2 = pTableList.get((int)tdata.charAt(a + 1));
             if (tNum2 < 0) {
                 tNum2 = 0;
@@ -171,12 +171,13 @@ public class Cryptography {
                     pR3hu24v5[tI] = pR3hu24v5[tJ];
                     pR3hu24v5[tJ] = temp;
                 }
-                int d = pR3hu24v5[((pR3hu24v5[q] + pR3hu24v5[j]) % 256)];
-                tCipher.append(Character.toString((char) ((tDataIn.get(k) ^ d))));
+                int d = pR3hu24v5[((pR3hu24v5[q] + pR3hu24v5[j]) % 256) ];
+                tCipher.append((char) ((tDataIn.get(k) ^ d)));
 
             }
         }
 
         return tCipher.toString();
     }
+
 }

@@ -1,7 +1,8 @@
-package net.h4bbo.phobos.server.habbohotel.encryption;
+package org.alexdev.havana.game.encryption;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -72,7 +73,9 @@ public class HugeInt15 {
                 }
             }
         }
-	}
+
+        //System.out.println("pData_NxIhNARqldyJyY2PfT03dK8t9OLUR - " + String.join(",", pData_NxIhNARqldyJyY2PfT03dK8t9OLUR.stream().map(x -> x == null ? "" : x.toString()).toArray(String[]::new)));
+    }
 
     public int getIntValue(Object tLimit) {
         int limit = (tLimit == null) ? 100000000 : (int) tLimit;
@@ -159,6 +162,15 @@ public class HugeInt15 {
 
     public static int[] getByteArray(BigInteger tSharedKey) {
         byte[] arr = tSharedKey.toByteArray();
+
+        // Remove the "sign bit" at the start that Java adds to the BigInteger so that
+        // it can match Shockwave's output
+        if (arr[0] == 0) {
+            byte[] bytesWithoutSignBit = new byte[arr.length - 1];
+            System.arraycopy(arr, 1, bytesWithoutSignBit, 0, bytesWithoutSignBit.length);
+            arr = bytesWithoutSignBit;
+        }
+
         int[] result = new int[arr.length];
         for (int i = 0; i < arr.length; i++) {
             if (arr[i] < 0) {
