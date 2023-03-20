@@ -14,21 +14,24 @@ import org.alexdev.havana.util.encoding.Base64Encoding;
 import java.math.BigInteger;
 import java.util.List;
 
+/**
+ * Written by @Quackster - based off Connection Instance class from Sulake's fuse_client.
+ * Copyright: 2023
+ * 
+ * <3
+ */
 public class EncryptionDecoder extends ByteToMessageDecoder {
 
     private Cryptography pHeaderDecoder;
     private Cryptography pDecoder;
-    private byte[] pLastContent;
 
     public EncryptionDecoder(BigInteger sharedKey) {
         this.pHeaderDecoder = new Cryptography(HugeInt15.getByteArray(sharedKey));
         this.pDecoder = new Cryptography(HugeInt15.getByteArray(sharedKey));
-        this.pLastContent = new byte[0];
     }
 
     @Override
     protected void decode(ChannelHandlerContext ctx, ByteBuf buffer, List<Object> out) throws Exception {
-        ByteBuf result = Unpooled.buffer();
         Player player = ctx.channel().attr(Player.PLAYER_KEY).get();
 
         String tHeader;
@@ -39,8 +42,8 @@ public class EncryptionDecoder extends ByteToMessageDecoder {
         buffer.markReaderIndex();
 
         while (buffer.readableBytes() > 6) {
-            player.getNetwork().setRx(
-                    NettyPlayerNetwork.iterateRandom(player.getNetwork().getRx())
+            player.getNetwork().setTx(
+                    NettyPlayerNetwork.iterateRandom(player.getNetwork().getTx())
             );
 
             byte[] tHeaderMsg = new byte[6];
@@ -65,10 +68,12 @@ public class EncryptionDecoder extends ByteToMessageDecoder {
 
             tBody = new String(tBodyMsg, StringUtil.getCharset());
             tBody = this.pDecoder.kg4R6Jo5xjlqtFGs1klMrK4ZTzb3R(tBody);
+            tBody = NettyPlayerNetwork.removePadding(tBody, player.getNetwork().getTx() % 5);
 
-            System.out.println(tBody);
+            ByteBuf result = Unpooled.buffer();
+            result.writeBytes(tBody.getBytes(StringUtil.getCharset()));
+
+            out.add(new NettyRequest(result));
         }
-
-        out.add(result);
     }
 }
