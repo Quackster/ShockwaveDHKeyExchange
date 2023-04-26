@@ -8,20 +8,14 @@ import org.alexdev.havana.game.encryption.Cryptography;
 import org.alexdev.havana.game.encryption.HugeInt15;
 import org.alexdev.havana.game.player.Player;
 import org.alexdev.havana.server.netty.NettyPlayerNetwork;
+import org.alexdev.havana.server.netty.streams.NettyRequest;
 import org.alexdev.havana.util.StringUtil;
 import org.alexdev.havana.util.encoding.Base64Encoding;
 
 import java.math.BigInteger;
 import java.util.List;
 
-/**
- * Written by @Quackster - based off Connection Instance class from Sulake's fuse_client.
- * Copyright: 2023
- * 
- * <3
- */
 public class EncryptionDecoder extends ByteToMessageDecoder {
-
     private Cryptography pHeaderDecoder;
     private Cryptography pDecoder;
 
@@ -42,10 +36,6 @@ public class EncryptionDecoder extends ByteToMessageDecoder {
         buffer.markReaderIndex();
 
         while (buffer.readableBytes() > 6) {
-            player.getNetwork().setTx(
-                    NettyPlayerNetwork.iterateRandom(player.getNetwork().getTx())
-            );
-
             byte[] tHeaderMsg = new byte[6];
             buffer.readBytes(tHeaderMsg);
 
@@ -63,6 +53,10 @@ public class EncryptionDecoder extends ByteToMessageDecoder {
                 return;
             }
 
+            player.getNetwork().setTx(
+                    NettyPlayerNetwork.iterateRandom(player.getNetwork().getTx())
+            );
+
             byte[] tBodyMsg = new byte[pMsgSize];
             buffer.readBytes(tBodyMsg);
 
@@ -71,9 +65,11 @@ public class EncryptionDecoder extends ByteToMessageDecoder {
             tBody = NettyPlayerNetwork.removePadding(tBody, player.getNetwork().getTx() % 5);
 
             ByteBuf result = Unpooled.buffer();
+
+            result.writeBytes(Base64Encoding.encode(tBody.length(), 3));
             result.writeBytes(tBody.getBytes(StringUtil.getCharset()));
 
-            out.add(new NettyRequest(result));
+            out.add(result);
         }
     }
 }
