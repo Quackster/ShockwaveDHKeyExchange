@@ -16,6 +16,12 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Written by @Quackster - based off Connection Instance class from Sulake's fuse_client.
+ * Copyright: 2023
+ * 
+ * <3
+ */
 public class EncryptionEncoder extends MessageToMessageEncoder<ByteBuf> {
     private static final Logger log = LoggerFactory.getLogger(EncryptionEncoder.class);
 
