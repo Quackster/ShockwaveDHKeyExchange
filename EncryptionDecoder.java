@@ -15,6 +15,12 @@ import org.alexdev.havana.util.encoding.Base64Encoding;
 import java.math.BigInteger;
 import java.util.List;
 
+/**
+ * Written by @Quackster - based off Connection Instance class from Sulake's fuse_client.
+ * Copyright: 2023
+ * 
+ * <3
+ */
 public class EncryptionDecoder extends ByteToMessageDecoder {
     private Cryptography pHeaderDecoder;
     private Cryptography pDecoder;
